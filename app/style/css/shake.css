@@ -1,0 +1,119 @@
+
+body{
+	background-color: #000;
+	background-image: url(../image/bg-pic.jpg);
+	background-size: cover;
+	background-position: center center;
+}
+
+#container{
+	overflow: hidden;
+}
+
+.stage{
+	width: 720px;
+	height: 720px;
+	transform-origin: center center;
+	-webkit-transform-origin: center center;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -360px;
+	margin-top: -400px;
+}
+
+.btn{
+	position: absolute;
+	padding: 5px;
+	background-repeat: no-repeat;
+	background-size: 25px;
+}
+.btn.invite{
+	right: 10px;
+	padding-right: 36px;
+  background-image: url(../image/add-friends.png);
+  background-position: right center;
+}
+.btn.rules{
+	left: 10px;
+  padding-left: 30px;
+  background-image: url(../image/rules.png);
+  background-position: left center;
+}
+
+.tips, .btn{
+	color: #fff;
+	font-size: 22px;
+	line-height: 50px;
+	text-align: center;
+}
+.tips{
+	height: 200px;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	/*background-color: #777777;*/
+	overflow-y: scroll;
+	z-index: 99;
+}
+.tips .item_shake, .tips .item_waiting{
+	display: none;
+	background: center top no-repeat;
+	background-size: 100px;
+	width: 100%;
+	height: 100%;
+}
+.tips.shake .item_shake, .tips.waiting .item_waiting{
+	display: block;
+}
+.tips .item_shake{
+	background-image: url(../image/shake.png);
+}
+.tips .item_waiting{
+	background-image: url(../image/no-shake.png);
+}
+.tips .text{
+	padding-top: 90px;
+}
+
+.dice{
+	width: 202px;
+	height: 202px;
+	position: absolute;
+	background-image: url(../image/dices.png);
+	background-position-x: -2px;
+	background-position-y: -2px;
+}
+
+.button{
+	display: inline-block;
+  border: 2px solid #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.curtain{
+	/*display: none;*/
+	z-index: 9999;
+	background-color: rgba(0,0,0,.8);
+	display: none;
+}
+.curtain table, .curtain tr, .curtain td{
+	width: 100%;
+	height: 100%;
+}
+.curtain td p{
+	text-align: center;
+	vertical-align: middle;
+	color: #fff;
+	padding: 20px;
+  text-indent: 2em;
+  font-size: 23px;
+  line-height: 1.3em;
+}
+
+
+
+
+
+	

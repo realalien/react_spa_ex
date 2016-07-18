@@ -1,5 +1,5 @@
 // gulpfile.js
-
+// HINT: For more recipes, https://github.com/gulpjs/gulp/tree/master/docs/recipes
 
 "use strict";
 
@@ -66,19 +66,22 @@ gulp.task('clean', function (cb) {
 });
 
 //build
-gulp.task('build', ['html','js', 'style' ]); // images, font
+gulp.task('build', ['html','js', 'style', 'copy-img', 'copy-audio']); // images, font
 
 // watch
+// NOTE:TODO: in case of deleting files, the old built files remains, so each watch should be able to fine-granulated into clean+copy synchronized tasks
 gulp.task("watch", function() {
-  gulp.watch('./app/js/vendor/**/**.js', ['vendor-js']);
-  gulp.watch(['./app/js/**/*.js', '!./app/js/vendor/**/*.js'], ['main-js']);
+  gulp.watch('app/js/vendor/**/**.js', ['vendor-js']);
+  gulp.watch(['app/js/**/*.js', '!app/js/vendor/**/*.js'], ['main-js']);
 
-  gulp.watch('./app/style/css/**/*.css', ['copy-css']);
-  gulp.watch('./app/style/**/*.scss', ['scss']);
+  gulp.watch('app/style/css/**/*.css', ['copy-css']);
+  gulp.watch('app/style/**/*.scss', ['scss']);
 
-  gulp.watch('./app/html/*.html', ['html']);
+  gulp.watch('app/html/*.html', ['html']);
 
-  // images, fonts, etc
+  // images, fonts, audio, etc
+  gulp.watch('app/audio/*.{jpg,png,JPEG,PNG}', ['copy-img']);
+  gulp.watch('app/audio/**/*.*', ['copy-audio']);
 
 
 });
@@ -121,10 +124,10 @@ gulp.task('vendor-js', function(){
 
 gulp.task('main-js',  function(options) {
     var appBundler = browserify({
-        entries: ['./app/main.js'], // Only need initial file, browserify finds the deps
+        entries: ['./app/js/main.js'], // Only need initial file, browserify finds the deps
         transform: [], // reactify : We want to convert JSX to normal javascript
         debug: !production,
-        paths: ['./app/'],  //  NOTE: to avoid copying ./app into ./build/app
+        //paths: ['./app/js'],  //  NOTE: to avoid copying ./app into ./build/app
         cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
     });
 
@@ -148,7 +151,7 @@ gulp.task('main-js',  function(options) {
         .pipe(gulpif( production, uglify().on('error', gutil.log))) // .pipe(gulpif( production, streamify(uglify())))
         .pipe(gulpif( development, sourceMaps.init({loadMaps: true}))) // NOTE: map file has to be generated after uglifys
         .pipe(gulpif( development, sourceMaps.write("./maps")))
-        .pipe(gulp.dest("./build/"))
+        .pipe(gulp.dest("./build/js/"))
         .pipe(browserSync.reload({ stream: true })) // .pipe(livereload())// It notifies livereload about a change if you use it
         .pipe(notify(function () {
           console.log('APP bundle built in ' + (Date.now() - start) + 'ms'); // TODO: why prompt twice? 
@@ -177,12 +180,25 @@ gulp.task("html", function() {
 
 
 // Images
-gulp.task('images', function() {
+gulp.task("copy-img", function() {
+    gulp.src('app/image/**/*.{png,jpg,JPEG,PNG}')
+    .pipe(gulp.dest('./build/image'))
+    .pipe(browserSync.reload({ stream: true }));
+});
+
+gulp.task('images-min', function() {
   gulp.src('app/images/**/*.*')
     .pipe(imagemin())
     .pipe(gulp.dest('build/images'))
     .pipe(browserSync.reload({ stream: true }));
 });
+
+gulp.task("copy-audio", function() {
+    gulp.src('app/audio/**/*.*')
+    .pipe(gulp.dest('./build/audio'))
+    .pipe(browserSync.reload({ stream: true }));
+});
+
 
 // # Fonts
 gulp.task('copy-fonts', function() {
@@ -291,6 +307,13 @@ gulp.task('help', function(){
     console.log("gulp --tasks   to see all available tasks.")
     console.log("");
 });
+
+
+//  Monitoring the gulpfile change and restart itself.
+// https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+// http://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change 
+
+
 
 //  NOT WORKING
 // // run a local server and open target page

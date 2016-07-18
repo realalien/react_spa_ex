@@ -2,27 +2,40 @@
 <!doctype html>
 <html>
   <head>
-    <title>Template Project Setup!!!</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <style>
-      h1, p, div { text-align: center; }
-      html       { background: #fffffe; }
-    </style>
-    <link rel="stylesheet" href="../css/style.min.css">
-    <link rel="stylesheet" href="../css/mystyle.min.css">
+    <title>赛马</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimal-ui">
+    
+
+    <link rel="stylesheet" href="../css/base.min.css">
+    <link rel="stylesheet" href="../css/shake.min.css">
+
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/underscore-min.js"></script>
+    <script type="text/javascript" src="../js/shake.js"></script>
+    <script type="text/javascript" src="../js/main.min.js"></script>
+
   </head>
   <body>
-    <div class="container">
-      <h2>.css browserSync test </h2>
-      <h3 class="scss">.scss browserSync test</h3> 
-
-      <div id="response">
-        
+    <div id="container" class="card">
+      <div class="curtain card btn box">
+        <table><tr><td><p>
+          游戏人数一般是2至8个人，每个参与游戏的人1只骰盅5骰子，猜测其它玩家拿到的共有多少个同点骰子。当有玩家“开”时，所猜相同点数的个数，如果大于实际个数则为输了。反之就是胜利。所猜点数依次为2点，3点，4点，5点，6点，1点。其中1点是财神，可以代表任意数。但是只要有一方喊过1后那么1就只能为1，不能再代替其它点数。当轮到自己猜点数时，你就必须比上家大的个数或点数。或者你可以选择不信上家而开盅验骰。
+        </p></td></tr></table>
       </div>
-      <div class="pages">
-
+      <div class="btn rules">规则</div>
+      <!-- <div class="btn invite">请朋友</div> -->
+      <div class="stage"></div>
+      <div class="tips shake">
+        <div class="item_shake">
+          <div class="text">摇摇手机</div>
+        </div>
+        <div class="item_waiting">
+          <div class="text">15秒后再摇</div>
+        </div>
       </div>
     </div>
-    <script src="../main.min.js"></script>
   </body>
 </html>
