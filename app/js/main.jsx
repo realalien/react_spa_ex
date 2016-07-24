@@ -212,6 +212,8 @@ var LeadboardTable = React.createClass({
     };
 
     var rows = [];
+
+  	{/* TODO: */}
     this.props.leaders.map( function(leader) {
       rows.push(<LeadboardRow leader={leader} />);
     }.bind(this));
@@ -244,13 +246,111 @@ var theLeaders = [
   { seq : 12, name : "Jasmine10", points : 100}
 ];
 
-var one = { seq : 1, name : "Daemon", points : 120};
 
 var Leadboard = React.createClass({
   render: function() {
     return (
       <LeadboardTable leaders={theLeaders} />
     );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
+// Results
+// 
+////////////////////////////////////////////////////////
+var races= [
+	{ seq : 1, name : "Race #1", status : "closed"},
+  { seq : 2, name : "Race #2", status : "ongoing"},
+  { seq : 3, name : "Race #3", status : "open"},
+  { seq : 4, name : "Race #4", status : "closed"},
+  { seq : 5, name : "Race #5", status : "ongoing"},
+  { seq : 6, name : "Race #6", status : "open"},
+];
+
+
+var ResultsRow = React.createClass({
+	render: function() {
+		var bgColor = "";
+
+		  switch( this.props.race.status ) {
+		    case 'closed':
+		      bgColor = "grey";
+		      break;
+		    case 'ongoing':
+		      bgColor = "green";
+		      break;
+		    case 'open':
+		    	bgColor = "yellow";
+		    	break;
+		    default:
+		      return "";
+		  };
+		
+
+		var rowStyle = {
+			backgroundColor : bgColor,
+			width : "90%",
+			height : 28,
+			fontSize: 21
+		};
+
+		return (
+			<tr style={rowStyle}>
+        <td>{this.props.race.name}</td>
+      </tr>
+		);
+	}
+});
+
+var ResultsTable = React.createClass({
+	_clickHandler : function (){
+    	this.props.clickHandler(race);
+  },
+  render: function() {
+    var tableStyle = {
+      width: "90%",
+      height : "90%",
+      margin: 20,
+      backgroundColor: "#222c40",
+      fontFamily:"GurmukhiMN",
+      fontSize: 21
+    };
+
+    var tableHeaderStyle = {
+      textAlign: "center",
+      fontSize:21,
+      color: "#8D744B",
+      height: 15
+    };
+
+    var rows = [];
+
+
+  	{/* TODO: */}
+    this.props.races.map( function(race) {
+      rows.push(<ResultsRow race={race} />);
+    }.bind(this));
+
+    return (
+      <table style={tableStyle} >
+        <thead>
+          
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+});
+
+
+var Results = React.createClass({
+  render: function() {
+		return (
+				<ResultsTable races={races} clickHandler/>
+		);
   }
 });
 
@@ -270,9 +370,10 @@ var App = React.createClass({
           <li><Link to="/">Entrances</Link></li>    {/* Four tiles of menu item of Status/Event, Races, Share button and External link */}
           <li><Link to="/welcome">Welcome</Link></li>      {/* Menu items of Races, Leadboard,  */}
 
-          <li><Link to="/leadboard">Leadboard</Link></li>    
+          <li><Link to="/leadboard">Leadboard</Link></li>
+          <li><Link to="/results">Results</Link></li>  
         </ul>
-        <div className="content">
+        <div className="content"> 
           {this.props.children}
         </div>
       </div>
@@ -287,6 +388,7 @@ ReactDOM.render(
       <IndexRoute component={Entrance}/>
       <Route path="/welcome" component={Welcome} />
       <Route path="/leadboard" component={Leadboard} />
+      <Route path="/results" component={Results} />
     </Route>
   </Router>,
   document.querySelector("#container")

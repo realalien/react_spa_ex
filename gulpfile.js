@@ -173,6 +173,7 @@ gulp.task('main-js',  function(options) {
         .pipe(gulpif( development, sourceMaps.write("./maps")))
         .pipe(gulp.dest("./build/js/"))
         .pipe(browserSync.reload({ stream: true })) // .pipe(livereload())// It notifies livereload about a change if you use it
+        .pipe(notify("main js built done!"))
         .pipe(notify(function () {
           console.log('APP bundle built in ' + (Date.now() - start) + 'ms'); // TODO: why prompt twice? 
           //browserSync.reload({ stream: true });
