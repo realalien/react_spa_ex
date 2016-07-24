@@ -1,13 +1,22 @@
 
 body{
-	background-color: #000;
-	background-image: url(../image/bg-pic.jpg);
+	background-color: #1B3148;;
+	/* background-image: url(../image/bg-pic.jpg); */
 	background-size: cover;
 	background-position: center center;
 }
 
 #container{
 	overflow: hidden;
+}
+
+#roulette{
+	font-size: 32px;
+	color: white;
+	left: 10px;
+  padding-left: 30px;
+  background-position: left center;
+overflow: hidden;
 }
 
 .stage{

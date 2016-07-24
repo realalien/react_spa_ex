@@ -9,6 +9,7 @@
 var browserify = require('browserify'),
     browserSync= require("browser-sync"),
     buffer     = require('vinyl-buffer'),
+    babelify = require('babelify'),
     flatten = require('gulp-flatten'),
     del        = require('del'),
     fs         = require('graceful-fs'),
@@ -72,7 +73,10 @@ gulp.task('build', ['html','js', 'style', 'copy-img', 'copy-audio']); // images,
 // NOTE:TODO: in case of deleting files, the old built files remains, so each watch should be able to fine-granulated into clean+copy synchronized tasks
 gulp.task("watch", function() {
   gulp.watch('app/js/vendor/**/**.js', ['vendor-js']);
+  gulp.watch('app/js/**/*.jsx', ['main-js']);
   gulp.watch(['app/js/**/*.js', '!app/js/vendor/**/*.js'], ['main-js']);
+  gulp.watch(['app/js/**/*.js', '!app/js/vendor/**/*.js', '!app/js/main.js'], ['template-js']);
+
 
   gulp.watch('app/style/css/**/*.css', ['copy-css']);
   gulp.watch('app/style/**/*.scss', ['scss']);
@@ -108,12 +112,12 @@ gulp.task('browsersync-reload', function () {
 // javascript
 gulp.task('js', function(){
   // NOTE: if use steps dependencies, the BrowserSync in the default task will not be carried out!
-  runSequence('vendor-js', 'main-js'); 
+  runSequence('vendor-js', 'template-js','main-js'); 
 }); 
 
 gulp.task('vendor-js', function(){
   gulp.src([
-          'app/js/vendor/**/*.js',
+          'app/js/vendor/**/*.js'
       ])
     // .pipe(concat('allVendorJs.js'))    // TIP: uncomment if necessary
     // .pipe(rename({suffix: '.min'}))
@@ -122,10 +126,24 @@ gulp.task('vendor-js', function(){
     .pipe(browserSync.reload({ stream: true }));
 });
 
+gulp.task('template-js', function(){
+  gulp.src([
+          'app/js/**/*.js', '!app/js/vendor/**/*.js', '!app/js/main.js'
+      ])
+    // .pipe(concat('allVendorJs.js'))    // TIP: uncomment if necessary
+    // .pipe(rename({suffix: '.min'}))
+    .pipe(gulpif(production,uglify()))
+    .pipe(gulp.dest('./build/js/'))
+    .pipe(browserSync.reload({ stream: true }));
+});
+
+
+
 gulp.task('main-js',  function(options) {
     var appBundler = browserify({
-        entries: ['./app/js/main.js'], // Only need initial file, browserify finds the deps
-        transform: [], // reactify : We want to convert JSX to normal javascript
+        entries: 'app/js/main.jsx', // Only need initial file, browserify finds the deps
+        extensions: ['.jsx'], 
+        //transform: [ 'babelify', {presets: ['es2015', 'react']}], // reactify : We want to convert JSX to normal javascript
         debug: !production,
         //paths: ['./app/js'],  //  NOTE: to avoid copying ./app into ./build/app
         cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
@@ -138,7 +156,9 @@ gulp.task('main-js',  function(options) {
       var start = Date.now();
       console.log('Building APP bundle');
       // NOTE: must 'return' to allow synchronized build before starting a server
-      return appBundler.bundle()
+      return appBundler
+        .transform('babelify', {presets: ['es2015', 'react']})
+        .bundle()
         // log errors if they happen
         .on('error', gutil.log.bind(gutil, gutil.colors.red(
            '\n\n*********************************** \n' +
