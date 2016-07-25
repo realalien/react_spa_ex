@@ -5,10 +5,16 @@ import { Router,
       Route,
       IndexRoute,
       IndexLink,
-      browserHistory, 
+      browserHistory,
       Link } from 'react-router';
 
 import { createHistory, useBasename } from 'history';
+// TODO: how to make it a non commonjs version?
+var Shake = require('shake.js');
+
+// NOTE: it looks like multiple components in one file causes some problems can hardly be solved
+//  so keep all class in one file.
+// import ResultsRow from './ResultsPage.jsx';
 
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
@@ -21,7 +27,7 @@ var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],
 
 var Tile = React.createClass({
 
-  _clickHandler : function() { 
+  _clickHandler : function() {
         /*
         Here you could add some validation that you truly have a callback in your props.
         if(_(this.props.clickHandler).isFunction() ) {
@@ -68,7 +74,7 @@ var Tile = React.createClass({
         lineHeight: "normal"
       };
 
-    {/* TODO: style with percentage size,  https://github.com/facebook/react-native/issues/364 
+    {/* TODO: style with percentage size,  https://github.com/facebook/react-native/issues/364
         TODO: display:inline-block;  can't be used here! Find a solution
     */}
     return (
@@ -112,12 +118,12 @@ var Entrance = React.createClass({
 ////////////////////////////////////////////////////////
 //
 // Welcome
-// 
+//
 ////////////////////////////////////////////////////////
 var Welcome = React.createClass({
   handleHorseSelection : function(){
     {/* Lead a shake page*/}
-  }, 
+  },
 
   handleLeadboard : function() {
 
@@ -139,19 +145,10 @@ var Welcome = React.createClass({
 });
 
 
-
-////////////////////////////////////////////////////////
-//
-// Races
-// 
-////////////////////////////////////////////////////////
-
-
-
 ////////////////////////////////////////////////////////
 //
 // Leadboard
-// 
+//
 ////////////////////////////////////////////////////////
 
 var LeadboardRow = React.createClass({
@@ -174,7 +171,7 @@ var LeadboardRow = React.createClass({
           height: 28,
           fontSize: 16
       };
-    var columnStyle_15 = {
+    var columnStyle_20 = {
     	width : "20%"
     };
     var columnStyle_30 = {
@@ -185,7 +182,7 @@ var LeadboardRow = React.createClass({
     };
     return (
       <tr style={rowStyle}>
-        <td style={columnStyle_15}>{this.props.leader.seq}</td>
+        <td style={columnStyle_20}>{this.props.leader.seq}</td>
         <td style={columnStyle_60} >{this.props.leader.name}</td>
         <td style={columnStyle_30}>{this.props.leader.points}</td>
       </tr>
@@ -221,7 +218,7 @@ var LeadboardTable = React.createClass({
     return (
       <table style={tableStyle} >
         <thead>
-          
+
         </thead>
         <tbody>{rows}</tbody>
       </table>
@@ -259,7 +256,7 @@ var Leadboard = React.createClass({
 ////////////////////////////////////////////////////////
 //
 // Results
-// 
+//
 ////////////////////////////////////////////////////////
 var races= [
 	{ seq : 1, name : "Race #1", status : "closed"},
@@ -272,6 +269,17 @@ var races= [
 
 
 var ResultsRow = React.createClass({
+	rowClicked : function (e){
+    	console.log(this.props.race);
+      if ( this.props.race.status === "open") {
+        alert("The race has not started.");
+      } else if ( this.props.race.status === "ongoing") {
+        alert("Keep watching! ");
+      } else {
+        alert("Ready to see the result?!");
+      }
+  },
+
 	render: function() {
 		var bgColor = "";
 
@@ -286,29 +294,40 @@ var ResultsRow = React.createClass({
 		    	bgColor = "yellow";
 		    	break;
 		    default:
-		      return "";
+		      return "black";
 		  };
-		
+
 
 		var rowStyle = {
 			backgroundColor : bgColor,
 			width : "90%",
-			height : 28,
-			fontSize: 21
+			// {/*height : 28,  */}
+			fontSize: 21,
+      textAlign : "center",
+      height : 21
 		};
+
+		var buttonStyle = {
+        width: "100%",
+        margin: 0,
+        fontFamily:"GurmukhiMN",
+        lineHeight: "100%",
+        fontSize: 21,
+        color:"#8D744B",
+        backgroundColor: "transparent"
+      };
 
 		return (
 			<tr style={rowStyle}>
-        <td>{this.props.race.name}</td>
+        <td>
+        	<button style={buttonStyle} onClick={this.rowClicked}>{this.props.race.name}</button>
+        </td>
       </tr>
 		);
 	}
 });
 
 var ResultsTable = React.createClass({
-	_clickHandler : function (){
-    	this.props.clickHandler(race);
-  },
   render: function() {
     var tableStyle = {
       width: "90%",
@@ -337,7 +356,7 @@ var ResultsTable = React.createClass({
     return (
       <table style={tableStyle} >
         <thead>
-          
+
         </thead>
         <tbody>{rows}</tbody>
       </table>
@@ -349,17 +368,99 @@ var ResultsTable = React.createClass({
 var Results = React.createClass({
   render: function() {
 		return (
-				<ResultsTable races={races} clickHandler/>
+				<ResultsTable races={races}/>
 		);
   }
 });
+
+
+////////////////////////////////////////////////////////
+//
+// Races Results
+//
+////////////////////////////////////////////////////////
+
+var RaceDetail = React.createClass({
+  render: function() {
+    var textStyle = {
+      color : "yellow",
+      fontSize : 21
+    };
+    return (
+      <div><p style={textStyle}>This is starting point! This page will looks similar to the leadboard listing, impl. later</p></div>
+    );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
+// Shake Page
+//
+////////////////////////////////////////////////////////
+var ShakePage = React.createClass({
+
+  getInitialState: function() {
+    var myShakeEvent = new Shake({
+        threshold: 15, // optional shake strength threshold
+        timeout: 1000 // optional, determines the frequency of event generation
+    });
+
+    myShakeEvent.start();
+    console.log("Shake started");
+
+    return {
+      data: []
+    };
+  },
+
+  shakeEventDidOccur: function() {
+    //put your own code here etc.
+    alert('shake!');
+
+    console.log("Shake detected");
+  },
+
+  componentDidMount: function() {
+    window.addEventListener('shake', this.shakeEventDidOccur, false);
+    console.log("Shake mounted ");
+  },
+
+  componentWillUnmount: function() {
+    myShakeEvent.stop();
+    window.removeEventListener('shake', this.shakeEventDidOccur, false);
+    console.log("Shake UN mounted ");
+  },
+
+  render: function(){
+    var textStyle = {
+      color : "yellow",
+      fontSize : 21
+    };
+
+    var imgStyle = {
+      display: "block",
+      margin: "auto",
+      marginTop: 75,
+      width: "60%"
+    };
+
+    return (
+      <div>
+        <img style={imgStyle} src="../image/shake.png"></img>
+        <p style={textStyle}>Shake, Shake, Shake it</p>
+      </div>
+    );
+  }
+});
+
 
 
 
 ////////////////////////////////////////////////////////
 //
 // App
-// 
+//
 ////////////////////////////////////////////////////////
 
 var App = React.createClass({
@@ -371,9 +472,11 @@ var App = React.createClass({
           <li><Link to="/welcome">Welcome</Link></li>      {/* Menu items of Races, Leadboard,  */}
 
           <li><Link to="/leadboard">Leadboard</Link></li>
-          <li><Link to="/results">Results</Link></li>  
+          <li><Link to="/results">Results</Link></li>
+          <li><Link to="/racedetail">Race Detail</Link></li>
+          <li><Link to="/shake">Shake Demo</Link></li>
         </ul>
-        <div className="content"> 
+        <div className="content">
           {this.props.children}
         </div>
       </div>
@@ -381,7 +484,7 @@ var App = React.createClass({
   }
 });
 
- 
+
 ReactDOM.render(
    <Router>
     <Route path="/" component={App}>
@@ -389,7 +492,9 @@ ReactDOM.render(
       <Route path="/welcome" component={Welcome} />
       <Route path="/leadboard" component={Leadboard} />
       <Route path="/results" component={Results} />
+      <Route path="/racedetail" component={RaceDetail} />
+      <Route path="/shake" component={ShakePage} />
     </Route>
   </Router>,
   document.querySelector("#container")
-); 
+);
