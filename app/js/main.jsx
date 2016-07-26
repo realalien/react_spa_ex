@@ -6,7 +6,7 @@ import { Router,
       IndexRoute,
       IndexLink,
       browserHistory,
-      Link } from 'react-router';
+      Link as ReactLink } from 'react-router';
 
 import { createHistory, useBasename } from 'history';
 // TODO: how to make it a non commonjs version?
@@ -18,6 +18,39 @@ var Shake = require('shake.js');
 
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
+
+
+////////////////////////////////////////////////////////
+//
+//  Link Util : handling both react router links and external links
+//  source : https://gist.github.com/shprink/bf9599e1d66b9dc4d151e89c1199ccb8
+//  link: https://github.com/reactjs/react-router/issues/1147
+////////////////////////////////////////////////////////
+export default class Link extends React.Component {
+  parseTo(to) {
+    let parser = document.createElement('a');
+    parser.href = to;
+    return parser;
+  }
+  isInternal(toLocation) {
+    console.log("============");
+    console.log("window.location.host   "+ window.location.host );
+    console.log("toLocation.host        "+ toLocation.host );
+    console.log("============");
+    return window.location.host === toLocation.host;
+  }
+
+  render() {
+    const {to, children, ...rest} = this.props;
+    const toLocation = this.parseTo(to);
+    const isInternal = this.isInternal(toLocation);
+    if (isInternal) {
+      return (<ReactLink to={toLocation.pathname} {...rest}>{children}</ReactLink>);
+    } else {
+      return (<a href={to} target="_blank" {...rest}>{children}</a>);
+    }
+  }
+}
 
 ////////////////////////////////////////////////////////
 //
@@ -52,68 +85,96 @@ var Tile = React.createClass({
         filter: "drop-shadow(0px 0px 5px #666)"
       };
 
-    var buttonStyle = {
-        fontSize: "1em",
-        width: x * 0.4,
-        height: y * 0.4,
-        margin: 0,
-        opacity: 0,
-        position: "relative",
-        fontFamily: "sans-serif",
-        color: "#ffffff",
-        fontWeight: "bold",
-        lineHeight: "3px",
-        border: "1px solid black"
-      };
-
-      var spanStyle = {
-        position: "relative",
-        top: y * .2,
-        display: "inline-block",
-        verticalAlign: "middle",
-        lineHeight: "normal"
-      };
+    // var buttonStyle = {
+    //     fontSize: "1em",
+    //     width: x * 0.4,
+    //     height: y * 0.4,
+    //     margin: 0,
+    //     opacity: 0,
+    //     position: "relative",
+    //     fontFamily: "sans-serif",
+    //     color: "#ffffff",
+    //     fontWeight: "bold",
+    //     lineHeight: "3px",
+    //     border: "1px solid black"
+    //   };
+    //
+    //   var spanStyle = {
+    //     position: "relative",
+    //     top: y * .2,
+    //     display: "inline-block",
+    //     verticalAlign: "middle",
+    //     lineHeight: "normal"
+    //   };
 
     {/* TODO: style with percentage size,  https://github.com/facebook/react-native/issues/364
         TODO: display:inline-block;  can't be used here! Find a solution
     */}
+
     return (
       <div style={tileStyle}>
-        <p style={spanStyle}>{this.props.text}</p>
-         <button onClick={this._clickHandler} style={buttonStyle}>+</button> {/* TODO: why can't set this.props.clickHandler here? Why using intermediate?*/}
+          <Link to={this.props.relPath}>{this.props.text}</Link>
       </div>
     );
   }
 });
 
 var Entrance = React.createClass({
-  handleEventInfo : function(e){
-    console.log("Event Info .... clicked");
-  },
-
-  handleRaces : function(e){
-    browserHistory.push('/welcome');
-  },
-
-  handlePostcard : function(e){
-    {/* TODO : share to weixin */}
-  },
-
-  handleComingEvent : function(e){
-    window.open("http://www.baidu.com");
-  },
-
-  render: function() {
+    render: function() {
     return (
       <div>
-        <Tile text="Event Info" clickHandler={this.handleEventInfo}/>
-        <Tile text="Races" clickHandler={this.handleRaces}/>
-        <Tile text="Postcard" clickHandler={this.handlePostcard}/>
-        <Tile text="Coming Event" clickHandler={this.handleComingEvent}/>
+        <Tile text="Event Info" relPath="/event" />
+        <Tile text="Races" relPath="/welcome" />
+        <Tile text="Postcard" relPath="/share" />
+        <Tile text="Coming Event" relPath="https://www.baidu.com"/>
       </div>
     );
   }
 });
+
+
+////////////////////////////////////////////////////////
+//
+// EventPage, static content
+//
+////////////////////////////////////////////////////////
+var EventInfoPage = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div style={textStyle}>
+         Are you the prophet of your fortune? <br/>
+         Collect the most points to win at the horse racing events!
+      </div>
+    );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
+// PostcardPage, modify content to share via weixin
+//
+////////////////////////////////////////////////////////
+var PostcardPage = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div style={textStyle}>
+         This page is reserved for demo of Sharing via Weixin.
+      </div>
+    );
+  }
+});
+
 
 ////////////////////////////////////////////////////////
 //
@@ -121,28 +182,24 @@ var Entrance = React.createClass({
 //
 ////////////////////////////////////////////////////////
 var Welcome = React.createClass({
-  handleHorseSelection : function(){
-    {/* Lead a shake page*/}
-  },
-
-  handleLeadboard : function() {
-
-  },
-
-  handleResult : function() {
-
-  },
-
   render: function() {
     return (
        <div>
-        <Tile text="Races" clickHandler={this.handleHorseSelection} />
-        <Tile text="Leadboard" clickHandler={this.handleLeadboard} />
-        <Tile text="Results" clickHandler={this.handleResult} />
+        <Tile text="Races" relPath="/" />
+        <Tile text="Leadboard" relPath="/leadboard" />
+        <Tile text="Results" relPath="/results" />
       </div>
     );
   }
 });
+
+
+////////////////////////////////////////////////////////
+//
+// Races
+//
+////////////////////////////////////////////////////////
+
 
 
 ////////////////////////////////////////////////////////
@@ -410,15 +467,21 @@ var ShakePage = React.createClass({
     console.log("Shake started");
 
     return {
-      data: []
+        event: myShakeEvent,
+        hasShaked: false
     };
   },
 
   shakeEventDidOccur: function() {
     //put your own code here etc.
-    alert('shake!');
-
     console.log("Shake detected");
+    alert("shaked!");
+    if (hasShaked) {
+      console.log("already shaked");
+    } else {
+      console.log("first shake, won't happen!");
+      this.setState({hasShaked: true});
+    }
   },
 
   componentDidMount: function() {
@@ -427,7 +490,6 @@ var ShakePage = React.createClass({
   },
 
   componentWillUnmount: function() {
-    myShakeEvent.stop();
     window.removeEventListener('shake', this.shakeEventDidOccur, false);
     console.log("Shake UN mounted ");
   },
@@ -494,6 +556,9 @@ ReactDOM.render(
       <Route path="/results" component={Results} />
       <Route path="/racedetail" component={RaceDetail} />
       <Route path="/shake" component={ShakePage} />
+      <Route path="/event" component={EventInfoPage} />
+      <Route path="/share" component={PostcardPage} />
+
     </Route>
   </Router>,
   document.querySelector("#container")

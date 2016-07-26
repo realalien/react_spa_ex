@@ -38,7 +38,7 @@ var browserify = require('browserify'),
 
 
 // ////////////////////////////////////////////////
-// Environment 
+// Environment
 // ///////////////////////////////////////////////
 // production/development environment inspection,  "gulp --production" for prod. env.
 var env = gutil.env.production? "Production" : "Development" ;
@@ -50,7 +50,7 @@ var development = !production
 // env = process.env.NODE_ENV;   // in package.json, {scripts: {start: NODE_ENV=production gulp}}
 
 // NOTE: for later even more complex tasks, or just moving tasks into separate files
-// tasks = reqDir('tasks/');  TODO: not working, due to 'require config file' needs seperate json config file which 
+// tasks = reqDir('tasks/');  TODO: not working, due to 'require config file' needs seperate json config file which
 
 
 // default tasks
@@ -58,7 +58,7 @@ gulp.task('default', ['build'] ); // just alias // TODO: still hold on watchify
 gulp.task('dev', [ 'browser-sync']); // dependencies
 
 
-// clean 
+// clean
 gulp.task('clean', function (cb) {
   del("./build/").then(function (paths) {
     fs.mkdirSync("build");
@@ -92,7 +92,7 @@ gulp.task("watch", function() {
 
 // browser-sync
 gulp.task('browser-sync', ['build', 'watch'], function () {
-  // NOTE: if adding '['./build/css/**/*.css', './build/js/**/*.js', './build/html/**/*.html'],' 
+  // NOTE: if adding '['./build/css/**/*.css', './build/js/**/*.js', './build/html/**/*.html'],'
   // before options of browserSync, then server will detec
   browserSync({
     server: {
@@ -112,8 +112,8 @@ gulp.task('browsersync-reload', function () {
 // javascript
 gulp.task('js', function(){
   // NOTE: if use steps dependencies, the BrowserSync in the default task will not be carried out!
-  runSequence('vendor-js', 'template-js','main-js'); 
-}); 
+  runSequence('vendor-js', 'template-js','main-js');
+});
 
 gulp.task('vendor-js', function(){
   gulp.src([
@@ -142,7 +142,8 @@ gulp.task('template-js', function(){
 gulp.task('main-js',  function(options) {
     var appBundler = browserify({
         entries: 'app/js/main.jsx', // Only need initial file, browserify finds the deps
-        extensions: ['.jsx'], 
+        extensions: ['.jsx'],
+        plugins: ["transform-object-rest-spread"],
         //transform: [ 'babelify', {presets: ['es2015', 'react']}], // reactify : We want to convert JSX to normal javascript
         debug: !production,
         //paths: ['./app/js'],  //  NOTE: to avoid copying ./app into ./build/app
@@ -175,7 +176,7 @@ gulp.task('main-js',  function(options) {
         .pipe(browserSync.reload({ stream: true })) // .pipe(livereload())// It notifies livereload about a change if you use it
         .pipe(notify("main js built done!"))
         .pipe(notify(function () {
-          console.log('APP bundle built in ' + (Date.now() - start) + 'ms'); // TODO: why prompt twice? 
+          console.log('APP bundle built in ' + (Date.now() - start) + 'ms'); // TODO: why prompt twice?
           //browserSync.reload({ stream: true });
         }));
     };
@@ -185,7 +186,7 @@ gulp.task('main-js',  function(options) {
     if (development) {
       appBundler = watchify(appBundler);
       appBundler.on('update', rebundle);
-    } 
+    }
 
     // And trigger the initial bundling
     rebundle();
@@ -229,7 +230,7 @@ gulp.task('copy-fonts', function() {
   .pipe(browserSync.reload({ stream: true }));
 });
 
-// style 
+// style
 gulp.task("style", ['scss', 'copy-css']);
 
 gulp.task("copy-css", function(){
@@ -254,9 +255,9 @@ gulp.task("scss", function() {
          '\n\n*********************************** \n' +
         'SCSS ERROR:' +
         '\n*********************************** \n\n'
-        ))) 
+        )))
     .pipe(autoprefixer({
-      browsers: ['last 3 version'], 
+      browsers: ['last 3 version'],
       cascade: false
       }))
     .pipe(minifycss())
@@ -286,7 +287,7 @@ gulp.task('dist', function () {
 
 
 // ////////////////////////////////////////////////
-// Extra 
+// Extra
 // ///////////////////////////////////////////////
 
 // load express server
@@ -332,7 +333,7 @@ gulp.task('help', function(){
 
 //  Monitoring the gulpfile change and restart itself.
 // https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
-// http://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change 
+// http://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change
 
 
 
@@ -350,7 +351,7 @@ gulp.task('help', function(){
 //   }
 // }
 
-// gulp.task('connect', function(){  
+// gulp.task('connect', function(){
 //   connect.server({
 //     root: config1.paths.dist,
 //     port: config1.port,
@@ -360,7 +361,7 @@ gulp.task('help', function(){
 // });
 
 
-// gulp.task('open-page',['connect'], function(){ 
+// gulp.task('open-page',['connect'], function(){
 //   gulp.src('./build/html/index.html')
 //     .pipe(open());
 // });
@@ -368,7 +369,7 @@ gulp.task('help', function(){
 
 // ////////////////////////////////////////////////
 // Configuration  (NOT IN USE)
-// * trade string duplicaton for tasks readability, 
+// * trade string duplicaton for tasks readability,
 // * refactor string into config later once gulefile.js is stable)
 // ///////////////////////////////////////////////
 // require config file
@@ -406,11 +407,11 @@ var config = {
         },
         extensions: ["sass", "scss"]  //  , "css"
       }
-    }   
+    }
 };
 
 // ////////////////////////////////////////////////
-// Util 
+// Util
 // ///////////////////////////////////////////////
 //build datestamp for cache busting
 var getStamp = function() {
@@ -419,7 +420,7 @@ var getStamp = function() {
   var year = myDate.getFullYear().toString(),
     month = ('0' + (myDate.getMonth() + 1)).slice(-2),
     day = ('0' + myDate.getDate()).slice(-2),
-    hr = myDate.getHours().toString(), 
+    hr = myDate.getHours().toString(),
     min = myDate.getMinutes().toString();
 
   var dateStr = year + month + day + "_"+hr+min;
