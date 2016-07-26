@@ -158,7 +158,7 @@ gulp.task('main-js',  function(options) {
       console.log('Building APP bundle');
       // NOTE: must 'return' to allow synchronized build before starting a server
       return appBundler
-        .transform('babelify', {presets: ['es2015', 'react']})
+        .transform('babelify', {presets: ['es2015', 'react', 'stage-2']})
         .bundle()
         // log errors if they happen
         .on('error', gutil.log.bind(gutil, gutil.colors.red(
