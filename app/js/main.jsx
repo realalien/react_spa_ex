@@ -33,10 +33,6 @@ export default class Link extends React.Component {
     return parser;
   }
   isInternal(toLocation) {
-    console.log("============");
-    console.log("window.location.host   "+ window.location.host );
-    console.log("toLocation.host        "+ toLocation.host );
-    console.log("============");
     return window.location.host === toLocation.host;
   }
 
@@ -54,7 +50,98 @@ export default class Link extends React.Component {
 
 ////////////////////////////////////////////////////////
 //
-//  Entrance
+//  Logo and Game Name, to keep same position for other components below the  logo for each page
+//
+////////////////////////////////////////////////////////
+var LogoAndName = React.createClass({
+  render : function(){
+    var imgStyle = {
+      textAlign : "center"
+    };
+
+    var divStyle = {
+      display: "inline-block",
+      width : "100%",
+      margin : "auto",
+      marginTop: 10,
+      textAlign : "center"
+    };
+    return(
+      <div style={divStyle}>
+        <Link to="/">
+            <img style={imgStyle} src="../image/logo.png" />
+        </Link>
+      </div>
+    );
+  }
+});
+
+////////////////////////////////////////////////////////
+//
+//  Game Entrance  ( from Are's proposed design)
+//
+////////////////////////////////////////////////////////
+var GameEntrance = React.createClass({
+  render: function() {
+    var divStyle = {
+      display: "inline",
+      width : "100%",
+      margin : "auto",
+      marginTop: 10
+    };
+
+    var spacingStyle = {
+      display: "inline-block",
+      width : x,
+      margin : "auto",
+      height: 30,
+      clear : "both"
+    };
+
+    return (
+      <div>
+        <LogoAndName />
+        <div style={spacingStyle} />
+        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" />
+        <Tile relPath="/prizes" isRound={false} imgUrl="../image/prizes.png" />
+        <div style={spacingStyle} />
+        <Tile relPath="/share" isRound={true} imgUrl="../image/playbtn.png" />
+
+      </div>
+    );
+  }
+});
+
+
+
+////////////////////////////////////////////////////////
+//
+//  Prizes  (from Are's drafts, placeholder page )
+//
+////////////////////////////////////////////////////////
+var PrizesPage = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div>
+        <LogoAndName />
+        <div style={textStyle}>
+           This page is placeholder page for  Prizes .
+        </div>
+      </div>
+    );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
+//  Entrance  (from Jameson's drafts ),
+//  Four tiles of menu item of Status/Event, Races, Share button and External link
 //
 ////////////////////////////////////////////////////////
 
@@ -70,20 +157,27 @@ var Tile = React.createClass({
     },
 
   render: function() {
+    var borderRadius = ( this.props.isRound === true ? "50%" : 5 ) ;
     var tileStyle = {
-        height:  y * 0.4 ,
-        width:  x * 0.4 ,
-        padding: 0,
-        margin: 20,
-        textAlign: "center",
-        color: "#8D744B",
-        backgroundColor: "#222c40",
-        fontFamily:"GurmukhiMN",
-        fontSize: 32,
-        display : 'inline-block',
-        WebkitFilter: "drop-shadow(0px 0px 5px #666)",
-        filter: "drop-shadow(0px 0px 5px #666)"
-      };
+      height:  x * 0.45 ,
+      width:  x * 0.45 ,
+      padding: 0,
+      margin: 10,
+      textAlign: "center",
+      color: "white",
+      backgroundColor: "rgba(218, 33, 39, 0.74)", // "#DA2127",
+      fontFamily:"GurmukhiMN",
+      fontSize: 32,
+      display : 'inline-block',
+      borderRadius : borderRadius,
+      //background: 'url(' + this.props.imgUrl + ') no-repeat center center fixed',
+    };
+
+    var imgStyle = {
+      display: "block",
+      marginLeft: "auto",
+      marginRight: "auto"
+    };
 
     // var buttonStyle = {
     //     fontSize: "1em",
@@ -110,10 +204,21 @@ var Tile = React.createClass({
     {/* TODO: style with percentage size,  https://github.com/facebook/react-native/issues/364
         TODO: display:inline-block;  can't be used here! Find a solution
     */}
+    var centerStyle = {
+      display: "table-cell",
+      verticalAlign: "middle",
+      minWidth : x * 0.45
+    };
 
+
+    // NOTE: there is an extra space above the first tile! Why?
     return (
       <div style={tileStyle}>
-          <Link to={this.props.relPath}>{this.props.text}</Link>
+          <Link to={this.props.relPath}>
+            <div style={centerStyle}>
+              <img style={imgStyle} src={this.props.imgUrl} />
+            </div>
+          </Link>
       </div>
     );
   }
@@ -127,6 +232,38 @@ var Entrance = React.createClass({
         <Tile text="Races" relPath="/welcome" />
         <Tile text="Postcard" relPath="/share" />
         <Tile text="Coming Event" relPath="https://www.baidu.com"/>
+      </div>
+    );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
+// Race choose page, (designed by Are)
+//
+////////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////
+//
+// EventPage, static content
+//
+////////////////////////////////////////////////////////
+var EventInfoPage = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div style={textStyle}>
+         Are you the prophet of your fortune? <br/>
+         Collect the most points to win at the horse racing events!
       </div>
     );
   }
@@ -157,6 +294,36 @@ var EventInfoPage = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
+// EventPage, static content
+//
+////////////////////////////////////////////////////////
+
+
+var GameIntro = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div style={textStyle}>
+         Are you the prophet of your fortune? <br/>
+         Collect the most points to win at the horse racing events!
+      </div>
+    );
+  }
+});
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////
+//
 // PostcardPage, modify content to share via weixin
 //
 ////////////////////////////////////////////////////////
@@ -178,15 +345,15 @@ var PostcardPage = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
-// Welcome
+// Welcome, Menu items of Races, Leadboard,
 //
 ////////////////////////////////////////////////////////
 var Welcome = React.createClass({
   render: function() {
     return (
        <div>
-        <Tile text="Races" relPath="/" />
-        <Tile text="Leadboard" relPath="/leadboard" />
+        <Tile text="Races" relPath="/races" />
+        <Tile text="Leaderboard" relPath="/leaderboard" />
         <Tile text="Results" relPath="/results" />
       </div>
     );
@@ -196,9 +363,185 @@ var Welcome = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
-// Races
+// Horse Races Listing Page, entrance for each match
+// TODO: need to save horse already selected
 //
 ////////////////////////////////////////////////////////
+
+var RacesListingPage = React.createClass({
+
+  // test a local races listing loading
+  getInitialState: function() {
+    return {
+      races: []
+    };
+  },
+
+  render: function() {
+
+    var rows = [];
+
+    this.state.races.map( function(race) {
+      rows.push(<RaceTile race={race} />);
+    }.bind(this));
+
+    return (
+      <div>
+        {rows}
+        <button onClick={this.demoAddRaces}>Clicked to add race</button>
+      </div>
+    );
+  },
+
+  demoAddRaces : function(){
+    let racesDummy = [
+       {seq: 1, name: "Race 1", status:"open", selected: true },
+       {seq: 2, name: "Race 2", status:"closed", selected: true },
+       {seq: 3, name: "Race 3", status:"ongoing", selected: true },
+       {seq: 4, name: "Race 4", status:"open", selected: true },
+       {seq: 5, name: "Race 5", status:"closed", selected: true },
+       {seq: 6, name: "Race 6", status:"ongoing", selected: true },
+    ];
+
+    var existings = this.state.races;
+    existings = existings.concat(racesDummy);
+    this.setState({
+     races: existings
+   });
+  }
+
+});
+
+
+var RaceTile = React.createClass({
+  render : function() {
+    var tileStyle = {
+        height:  y * 0.2 ,
+        width:  x * 0.4 ,
+        padding: 0,
+        margin: 20,
+        textAlign: "center",
+        color: "#8D744B",
+        backgroundColor: "#222c40",
+        fontFamily:"GurmukhiMN",
+        fontSize: 32,
+        display : 'inline-block',
+        WebkitFilter: "drop-shadow(0px 0px 5px #666)",
+        filter: "drop-shadow(0px 0px 5px #666)"
+      };
+
+    return (
+      <div style={tileStyle}>
+
+      </div>
+    );
+  }
+});
+
+////////////////////////////////////////////////////////
+//
+// Horse Races Detail Page, showing user's selection ( or shake to select )
+//
+////////////////////////////////////////////////////////
+
+// demo of random selection horse , now without animation
+var HorseBtn = React.createClass({
+  handleClick : function(e) {
+    alert(this.props.value)
+    //this.props.parentHandler(this.props.value);
+  },
+
+  render : function() {
+    var style = {
+      width : 50,
+      height: 50,
+      color: "white",
+      backgroundColor : "black",
+      display : 'inline-block',
+      margin: 10
+    };
+
+    return (
+      <button style={style} onClick={this.handleClick}>
+        {this.props.text}
+      </button>
+    );
+  }
+});
+
+var RaceDetailPage = React.createClass({
+  handleHorseBtn : function(i, props) {
+      alert("parent hanlder received btn :  " + i + " , this.state.raceId: " + this.state.raceId  );
+
+      // reload selections, as { <raceid> : <horseid> }
+      var racesAlreadyDoneSelection = this.state.racesDidSelected;
+      racesAlreadyDoneSelection[this.state.raceId] = i;
+
+
+      console.log("JSON output: "+ JSON.stringify(racesAlreadyDoneSelection));
+      // save to localstorage
+      localStorage.setItem('racesDidSelected', JSON.stringify(racesAlreadyDoneSelection));
+      // TODO: temp code, check
+      var check = JSON.parse(localStorage.getItem('racesDidSelected')) || {}
+      console.log("in handleHorseBtn, check selection in storage: " + check);
+      // Q: when to clean this?
+
+      // update state
+      this.setState({ racesDidSelected: racesAlreadyDoneSelection });
+      // TODO: check state
+      var check2 = this.state.racesDidSelected || {}
+      console.log("in handleHorseBtn, check selection in state : " + check2);
+  },
+
+  // TODO: define const key for localstorage's key
+  getInitialState: function() {
+
+    // load from storage
+    var racesDidSelected = JSON.parse(localStorage.getItem('racesDidSelected')) || {}
+
+    console.log("in getInitialState, racesDidSelected : " + JSON.stringify(racesDidSelected));
+
+
+    return {
+      raceId : "123",  // TODO: temp code, supposed to read from params (if empty, prompts no race on selection)
+      racesDidSelected : racesDidSelected
+
+    };
+  },
+
+  componentWillUnmount: function() {
+  },
+
+  render : function(){
+    // create array of button for selection, and save the btn index
+    var horses = [];
+
+    var divStyle = {
+      display: "inline"
+    }
+
+    for (var i=1; i<= 20; i++){
+      var str = "Horse #"+i;
+      horses.push(
+        <div style={divStyle} onClick={this.handleHorseBtn.bind(this, i, this.props)} key={i} >
+          <HorseBtn text={str} value={i}/>
+        </div>
+      );
+    }
+
+
+
+    return (
+      <div>
+        {horses}
+      </div>
+
+    );
+
+  }
+});
+
+
 
 
 
@@ -209,7 +552,7 @@ var Welcome = React.createClass({
 ////////////////////////////////////////////////////////
 
 var LeadboardRow = React.createClass({
-  render: function() {
+  render : function() {
     {/* TODO: compare with user info, for now always the first row. */}
     var rowStyle = this.props.leader.seq == 1 ?
       {
@@ -301,10 +644,13 @@ var theLeaders = [
 ];
 
 
-var Leadboard = React.createClass({
+var Leaderboard = React.createClass({
   render: function() {
     return (
-      <LeadboardTable leaders={theLeaders} />
+      <div>
+        <LogoAndName />
+        <LeadboardTable leaders={theLeaders} />
+      </div>
     );
   }
 });
@@ -433,7 +779,7 @@ var Results = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
-// Races Results
+// Races Results, just listing for each race match, better if within one page, not subcomponent
 //
 ////////////////////////////////////////////////////////
 
@@ -530,13 +876,16 @@ var App = React.createClass({
     return (
       <div>
         <ul className="header">
-          <li><Link to="/">Entrances</Link></li>    {/* Four tiles of menu item of Status/Event, Races, Share button and External link */}
-          <li><Link to="/welcome">Welcome</Link></li>      {/* Menu items of Races, Leadboard,  */}
+          {/*<li><Link to="/">Entrances</Link></li>*/}
 
+
+          {/*<li><Link to="/welcome">Welcome</Link></li>
           <li><Link to="/leadboard">Leadboard</Link></li>
           <li><Link to="/results">Results</Link></li>
           <li><Link to="/racedetail">Race Detail</Link></li>
           <li><Link to="/shake">Shake Demo</Link></li>
+          <li><Link to="/race">Race Detail Page</Link></li>*/}
+
         </ul>
         <div className="content">
           {this.props.children}
@@ -550,15 +899,10 @@ var App = React.createClass({
 ReactDOM.render(
    <Router>
     <Route path="/" component={App}>
-      <IndexRoute component={Entrance}/>
-      <Route path="/welcome" component={Welcome} />
-      <Route path="/leadboard" component={Leadboard} />
-      <Route path="/results" component={Results} />
-      <Route path="/racedetail" component={RaceDetail} />
-      <Route path="/shake" component={ShakePage} />
-      <Route path="/event" component={EventInfoPage} />
-      <Route path="/share" component={PostcardPage} />
-
+      <IndexRoute component={GameEntrance}/>
+      <Route path="/leaderboard" component={Leaderboard} />
+      <Route path="/prizes" component={PrizesPage} />
+      <Route path="/intro" component={GameIntro} />
     </Route>
   </Router>,
   document.querySelector("#container")
