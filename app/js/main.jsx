@@ -17,6 +17,11 @@ var Shake = require('shake.js');
 // import ResultsRow from './ResultsPage.jsx';
 
 
+// TODO:
+// * TODO: the asset of tile icon should be the same size,
+//         otherwise the positions of itself and siblings are too complex
+
+
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
 
@@ -173,6 +178,15 @@ var Tile = React.createClass({
       //background: 'url(' + this.props.imgUrl + ') no-repeat center center fixed',
     };
 
+    var linkStyle = {
+      display: "table",
+      width : "100%",
+      height : "100%",
+      border : "2px dashed green",
+      float: "right",
+      textAlign : "center"
+    };
+
     var tableWrappingStyle = {
       width : "100%",
       height : "100%",
@@ -219,22 +233,27 @@ var Tile = React.createClass({
 
     return (
       <div style={tileStyle}>
-        <div style={tableWrappingStyle}>
-          <div style={cellWrappingStyle}>
-            <img style={imgStyle} src={this.props.imgUrl}/>
-            <div style={rowWrappingStyle}>
-              {spanText}
+        <Link style={linkStyle} to={this.props.relPath}>
+          <div style={tableWrappingStyle}>
+            <div style={cellWrappingStyle}>
+              <img style={imgStyle} src={this.props.imgUrl}/>
+              <div style={rowWrappingStyle}>
+                {spanText}
+              </div>
             </div>
-
           </div>
-        </div>
+        </Link>
       </div>
-
     );
-
   }
 });
 
+
+////////////////////////////////////////////////////////
+//
+// Race choose page, (drafted by Jameson)
+//
+////////////////////////////////////////////////////////
 var Entrance = React.createClass({
     render: function() {
     return (
