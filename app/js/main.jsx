@@ -64,7 +64,8 @@ var LogoAndName = React.createClass({
       width : "100%",
       margin : "auto",
       marginTop: 10,
-      textAlign : "center"
+      textAlign : "center",
+      marginBottom : 30
     };
     return(
       <div style={divStyle}>
@@ -75,6 +76,7 @@ var LogoAndName = React.createClass({
     );
   }
 });
+
 
 ////////////////////////////////////////////////////////
 //
@@ -102,10 +104,10 @@ var GameEntrance = React.createClass({
       <div>
         <LogoAndName />
         <div style={spacingStyle} />
-        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" />
-        <Tile relPath="/prizes" isRound={false} imgUrl="../image/prizes.png" />
+        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Leaderboard"/>
+        <Tile relPath="/prizes" isRound={false} imgUrl="../image/prizes.png" text="Prizes"/>
         <div style={spacingStyle} />
-        <Tile relPath="/share" isRound={true} imgUrl="../image/playbtn.png" />
+        <Tile relPath="/races" isRound={true} imgUrl="../image/playbtn.png" text="" />
 
       </div>
     );
@@ -161,66 +163,75 @@ var Tile = React.createClass({
     var tileStyle = {
       height:  x * 0.45 ,
       width:  x * 0.45 ,
-      padding: 0,
+      padding: "auto",
       margin: 10,
       textAlign: "center",
       color: "white",
       backgroundColor: "rgba(218, 33, 39, 0.74)", // "#DA2127",
-      fontFamily:"GurmukhiMN",
-      fontSize: 32,
       display : 'inline-block',
       borderRadius : borderRadius,
       //background: 'url(' + this.props.imgUrl + ') no-repeat center center fixed',
     };
 
-    var imgStyle = {
-      display: "block",
-      marginLeft: "auto",
-      marginRight: "auto"
+    var tableWrappingStyle = {
+      width : "100%",
+      height : "100%",
+      display: "table",
+      overflow: "hidden",
+      // border : "2px green dashed"
     };
 
-    // var buttonStyle = {
-    //     fontSize: "1em",
-    //     width: x * 0.4,
-    //     height: y * 0.4,
-    //     margin: 0,
-    //     opacity: 0,
-    //     position: "relative",
-    //     fontFamily: "sans-serif",
-    //     color: "#ffffff",
-    //     fontWeight: "bold",
-    //     lineHeight: "3px",
-    //     border: "1px solid black"
-    //   };
-    //
-    //   var spanStyle = {
-    //     position: "relative",
-    //     top: y * .2,
-    //     display: "inline-block",
-    //     verticalAlign: "middle",
-    //     lineHeight: "normal"
-    //   };
-
-    {/* TODO: style with percentage size,  https://github.com/facebook/react-native/issues/364
-        TODO: display:inline-block;  can't be used here! Find a solution
-    */}
-    var centerStyle = {
+    var cellWrappingStyle = {
       display: "table-cell",
       verticalAlign: "middle",
-      minWidth : x * 0.45
+      textAlign: "center",
+      // border : "2px brown solid",
     };
 
+    var imgStyle = {
+      display: "inline-block",
+      // border : "2px red solid",
+    };
 
-    // NOTE: there is an extra space above the first tile! Why?
+    var rowWrappingStyle = {
+      display: "table-row",
+      textAlign : "center",
+      // border : "2px black dashed",
+      width : x * 0.45,
+      margin : "auto",
+      position: "relative",
+      bottom: 10
+    };
+
+    var spanStyle = {
+      fontSize : 24,
+      textAlign : "center",
+      // border : "2px yellow dashed",
+      width : x * 0.45,
+      position: "relative",
+      bottom: 0
+    };
+
+    var spanText = ""
+    if (this.props.text !== "") {
+      spanText = <p style={spanStyle} >{this.props.text}</p>
+    }
+
     return (
       <div style={tileStyle}>
-          <Link to={this.props.relPath}>
-            <div style={centerStyle}>
-              <img style={imgStyle} src={this.props.imgUrl} />
+        <div style={tableWrappingStyle}>
+          <div style={cellWrappingStyle}>
+            <img style={imgStyle} src={this.props.imgUrl}/>
+            <div style={rowWrappingStyle}>
+              {spanText}
             </div>
-          </Link>
+
+          </div>
+        </div>
       </div>
+
     );
+
   }
 });
 
@@ -243,9 +254,99 @@ var Entrance = React.createClass({
 // Race choose page, (designed by Are)
 //
 ////////////////////////////////////////////////////////
+var RaceChoosePage = React.createClass({
+  render : function() {
+    return (
+      <div>
+        <LogoAndName />
+        <TextBelt text="Select your race"/>
+        <div></div>
+        <RaceSelectTable numOfCells={6}/>
+      </div>
+    );
+  }
+});
 
 
+var TextBelt = React.createClass({
+  render : function() {
+    var divStyle = {
+      textAlign : "center",
+      color: "white",
+      backgroundColor: "rgba(0,0,0,0.2)",
+      fontSize : 28,
+      height: 40,
+      marginBottom: 30,
+      display: "table",
+      width : "100%"
+    };
 
+    var spanStyle = {
+      width : "100%",
+      textAlign: "center",
+      display: "table-cell",
+      verticalAlign: "middle"
+    }
+    return (
+      <div style={divStyle}>
+        <span style={spanStyle}>{this.props.text}</span>
+      </div>
+    );
+  }
+});
+
+
+var RaceSelectTile = React.createClass({
+  render : function() {
+    var w = this.props.width;
+    var divStyle = {
+      width : w ,
+      height : w,
+      display : "inline-block",
+      borderRadius : 4,
+      backgroundColor : "rgba(218, 33, 39, 0.74)",
+      margin:20,
+      fontSize: 38,
+      fontFamily: 'GurmukhiMN',
+      color: "white",
+      padding : "20px 20px 20px 20px",
+      // border : "2px green dashed"
+    };
+    return (
+      <div style={divStyle}>{this.props.text}</div>
+    );
+  }
+});
+
+var RaceSelectTable = React.createClass({
+  handleRaceTile : function(i, props) {
+    alert(i);
+  } ,
+
+  render : function() {
+
+    var divStyle = {
+      textAlign : "center"
+    };
+
+    var cells = [];
+    var w = (x*0.5-10*2-10*6) / 3.0;
+    console.log(w);
+    for (var i=1; i <= this.props.numOfCells; i++) {
+      cells.push(
+        <div style={divStyle} onClick={this.handleRaceTile.bind(this, i, this.props)} key={i} >
+          <RaceSelectTile width={w} text={i}/>
+        </div>
+      )
+    }
+
+    return (
+      <div style={divStyle}>
+        {cells}
+      </div>
+    );
+  }
+});
 
 
 ////////////////////////////////////////////////////////
@@ -903,6 +1004,7 @@ ReactDOM.render(
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/prizes" component={PrizesPage} />
       <Route path="/intro" component={GameIntro} />
+      <Route path="/races" component={RaceChoosePage} />
     </Route>
   </Router>,
   document.querySelector("#container")
