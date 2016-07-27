@@ -113,7 +113,6 @@ var GameEntrance = React.createClass({
         <Tile relPath="/prizes" isRound={false} imgUrl="../image/prizes.png" text="Prizes"/>
         <div style={spacingStyle} />
         <Tile relPath="/races" isRound={true} imgUrl="../image/playbtn.png" text="" />
-
       </div>
     );
   }
@@ -182,7 +181,7 @@ var Tile = React.createClass({
       display: "table",
       width : "100%",
       height : "100%",
-      border : "2px dashed green",
+      // border : "2px dashed green",
       float: "right",
       textAlign : "center"
     };
@@ -274,13 +273,65 @@ var Entrance = React.createClass({
 //
 ////////////////////////////////////////////////////////
 var RaceChoosePage = React.createClass({
+  getInitialState: function() {
+    return { showHowto: true };
+  },
+
+  closeBtnClicked : function() {
+    this.setState({ showHowto: false });
+  },
+
   render : function() {
+    /////////////////// overlay  /////////////
+    var overlayStyle = {
+      width : "90%",
+      height : "70%",
+      marginLeft : "5%",
+      marginRight : "5%",
+      borderRadius : 5,
+      backgroundColor: "rgba(218, 33, 39, 1)",
+      textAlign : "center",
+      position : "absolute",
+      top : 70,
+      marginTop: "12%",
+      zIndex : 9999
+    };
+
+    var closebtnStyle = {
+      float: "right",
+      marginTop : 10,
+      marginRight : 10
+    };
+
+    var textContainerStyle ={
+      clear: "both"
+    };
+
+    var howItWorksNode = "";
+    if ( this.state.showHowto === true) {
+      howItWorksNode = (
+        <div style={overlayStyle}>
+          <img style={closebtnStyle} src="../image/closebtn.png" onClick={this.closeBtnClicked}></img>
+          <div style={textContainerStyle}>
+            <h1>How it works</h1>
+            <p>Blah blah blah ... Blah blah blah ... Blah blah blah ... </p>
+          </div>
+        </div>
+      );
+    } else {
+      howItWorksNode = "";
+    }
+
     return (
       <div>
-        <LogoAndName />
-        <TextBelt text="Select your race"/>
-        <div></div>
-        <RaceSelectTable numOfCells={6}/>
+        <div>
+          <LogoAndName />
+          <TextBelt text="Select your race"/>
+          <div></div>
+          <RaceSelectTable numOfCells={6}/>
+        </div>
+
+        {howItWorksNode}
       </div>
     );
   }
@@ -339,13 +390,15 @@ var RaceSelectTile = React.createClass({
 
 var RaceSelectTable = React.createClass({
   handleRaceTile : function(i, props) {
-    alert(i);
-  } ,
+
+  },
 
   render : function() {
 
     var divStyle = {
-      textAlign : "center"
+      textAlign : "center",
+      display : "inline-block",
+      // border : "2px blue solid",
     };
 
     var cells = [];
