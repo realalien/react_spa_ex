@@ -10,7 +10,7 @@ body{
 	cursor: default;
 	zoom: 1;
 	text-align: center;
-	background: url("../image/background.jpg") no-repeat center center fixed;
+	background: url("../image/background.png") no-repeat center center fixed;
 }
 
 table {

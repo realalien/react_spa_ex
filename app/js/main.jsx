@@ -25,6 +25,8 @@ var Shake = require('shake.js');
 // * TODO: refactor the LogoAndName components to base layout component rather
 //         than on every page component.
 // * TODO: define API protocol for server data
+// * TODO: defensive:  collect all user screen size in case of any UI misconfortableness
+
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
@@ -90,6 +92,120 @@ var LogoAndName = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
+//  User name and telephone form  ( from Are's proposed design)
+//
+////////////////////////////////////////////////////////
+var UserInfoForm = React.createClass({
+  getInitialState: function() {
+    return {
+      name: undefined,  // TIP: to avoid uncontrolled warning, SUG: https://github.com/erikras/redux-form/issues/735
+      phone: undefined,
+      verfified : false,  // flag to make sure only shown once after user input by server
+      clickedSave : false // flag to control the save enable/disable
+    };
+  },
+
+  closeBtnClicked : function(event){
+
+  },
+
+  handleNameInputChange : function(event){
+      this.setState({name: event.target.value});
+  },
+
+  handlePhoneInputChange : function(event){
+      this.setState({phone: event.target.value});
+  },
+
+  saveUserInfo : function(e){
+    this.setState({clickedSave: true});
+    console.log("saveUserInfo  .... not implemented.");
+  },
+
+  render : function(){
+    var overlayStyle = {
+      width : "90%",
+      height : "70%",
+      marginLeft : "5%",
+      marginRight : "5%",
+      borderRadius : 5,
+      backgroundColor: "rgba(218, 33, 39, 1)",
+      textAlign : "center",
+      color : "white",
+      position : "absolute",
+      top : 130,
+      marginTop: "12%",
+      zIndex : 9999
+    };
+
+    var inputContainerStyle = {
+      marginTop: 30,
+      marginBottom : 30
+    };
+
+    var inputTextStyle ={
+        width : "90%",
+        height : 50,
+        textAlign : "center",
+        fontSize : 26,
+        marginTop : 20
+    };
+
+
+    var inputSaveBtnStyle = {
+      height : 50,
+      width : "90%",
+      backgroundColor: "#630709",
+      fontSize: 26,
+      color: "white",
+      marginTop : 70,
+      padding: 0,
+      border: "none"
+    };
+
+    var enableSaveBtn = (
+         this.state.name!== undefined
+      && this.state.name!== ""
+      && this.state.phone!== undefined
+      && this.state.phone!== "");
+    // console.log(enableSaveBtn);
+
+    return (
+      <div style={overlayStyle} onClick={this.closeBtnClicked}>
+        <h1>Sign Up</h1>
+        <p>Blah blah blah ... Blah blah blah ... Blah blah blah ... </p>
+        <div style={inputContainerStyle}>
+          <input
+            style={inputTextStyle}
+            placeholder="Name"
+            value={this.state.name}
+            onChange={this.handleNameInputChange}
+          />
+          <input
+            style={inputTextStyle}
+            placeholder="Phone Number"
+            value={this.state.phone}
+            type="number"
+            onChange={this.handlePhoneInputChange}
+          />
+
+          <button
+            style={inputSaveBtnStyle}
+            type="submit"
+            disabled={!enableSaveBtn}
+            onClick={this.saveUserInfo}>
+            Save
+          </button>
+
+        </div>
+      </div>
+    );
+  }
+});
+
+
+////////////////////////////////////////////////////////
+//
 //  Game Entrance  ( from Are's proposed design)
 //
 ////////////////////////////////////////////////////////
@@ -114,10 +230,13 @@ var GameEntrance = React.createClass({
       <div>
         <LogoAndName />
         <div style={spacingStyle} />
-        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Leaderboard"/>
-        <Tile relPath="/prizes" isRound={false} imgUrl="../image/prizes.png" text="Prizes"/>
-        <div style={spacingStyle} />
-        <Tile relPath="/races" isRound={true} imgUrl="../image/playbtn.png" text="" />
+        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Information"/>
+        <Tile relPath="/prizes" isRound={false} imgUrl="../image/news.png" text="News"/>
+        {/*<div style={spacingStyle} />*/}
+        <Tile relPath="/races" isRound={false} imgUrl="../image/racegame.png" text="Race Game" />
+        <Tile relPath="/postcard" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
+
+        <UserInfoForm />
       </div>
     );
   }
@@ -147,6 +266,29 @@ var PrizesPage = React.createClass({
   }
 });
 
+
+////////////////////////////////////////////////////////
+//
+//  News  (from Are's drafts, placeholder page )
+//
+////////////////////////////////////////////////////////
+var NewsPage = React.createClass({
+  render: function(){
+    var textStyle = {
+        color: "yellow",
+        fontSize : 21
+    };
+
+    return (
+      <div>
+        <LogoAndName />
+        <div style={textStyle}>
+           This page is placeholder page for News .
+        </div>
+      </div>
+    );
+  }
+});
 
 ////////////////////////////////////////////////////////
 //
@@ -729,8 +871,11 @@ var PostcardPage = React.createClass({
     };
 
     return (
-      <div style={textStyle}>
-         This page is reserved for demo of Sharing via Weixin.
+      <div>
+        <LogoAndName />
+        <div style={textStyle}>
+           This page is placeholder page for  Prizes .
+        </div>
       </div>
     );
   }
@@ -1296,7 +1441,10 @@ ReactDOM.render(
       <IndexRoute component={GameEntrance}/>
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/prizes" component={PrizesPage} />
+      <Route path="/news" component={NewsPage} />
       <Route path="/intro" component={GameIntro} />
+      <Route path="/postcard" component={PostcardPage} />
+
       <Route path="/races" component={RaceChoosePage} />
       <Route path="/race/:raceId" component={HorseSelectPage} />
     </Route>
