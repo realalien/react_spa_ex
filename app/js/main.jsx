@@ -12,6 +12,8 @@ import { createHistory, useBasename } from 'history';
 // TODO: how to make it a non commonjs version?
 var Shake = require('shake.js');
 
+// import {LogoAndName} from './logo_and_name.jsx';
+
 // NOTE: it looks like multiple components in one file causes some problems can hardly be solved
 //  so keep all class in one file.
 // import ResultsRow from './ResultsPage.jsx';
