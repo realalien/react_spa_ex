@@ -22,6 +22,7 @@ var Shake = require('shake.js');
 //         otherwise the positions of itself and siblings are too complex
 // * TODO: refactor the LogoAndName components to base layout component rather
 //         than on every page component.
+// * TODO: define API protocol for server data
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
@@ -56,8 +57,9 @@ export default class Link extends React.Component {
 
 ////////////////////////////////////////////////////////
 //
-//  Logo and Game Name, to keep same position for other components below the  logo for each page
-//
+//  Logo and Game Name
+//  to keep same position for other components below the logo for each page
+//  TODO: refactor out to the base layout
 ////////////////////////////////////////////////////////
 var LogoAndName = React.createClass({
   render : function(){
@@ -102,7 +104,7 @@ var GameEntrance = React.createClass({
       display: "inline-block",
       width : x,
       margin : "auto",
-      height: 30,
+      height: 20, // TODO: how to best fit for different size of screen?
       clear : "both"
     };
 
@@ -118,7 +120,6 @@ var GameEntrance = React.createClass({
     );
   }
 });
-
 
 
 ////////////////////////////////////////////////////////
@@ -147,8 +148,8 @@ var PrizesPage = React.createClass({
 
 ////////////////////////////////////////////////////////
 //
-//  Entrance  (from Jameson's drafts ),
-//  Four tiles of menu item of Status/Event, Races, Share button and External link
+//  Tile
+//  Common util, tiles of menu item for the front pages, accept imgUrl
 //
 ////////////////////////////////////////////////////////
 
@@ -166,8 +167,8 @@ var Tile = React.createClass({
   render: function() {
     var borderRadius = ( this.props.isRound === true ? "50%" : 5 ) ;
     var tileStyle = {
-      height:  x * 0.45 ,
-      width:  x * 0.45 ,
+      height:  x * 0.40 ,
+      width:  x * 0.40 ,
       padding: "auto",
       margin: 10,
       textAlign: "center",
@@ -211,17 +212,17 @@ var Tile = React.createClass({
       display: "table-row",
       textAlign : "center",
       // border : "2px black dashed",
-      width : x * 0.45,
+      width : x * 0.40,
       margin : "auto",
       position: "relative",
       bottom: 10
     };
 
     var spanStyle = {
-      fontSize : 24,
+      fontSize : 20,
       textAlign : "center",
       // border : "2px yellow dashed",
-      width : x * 0.45,
+      width : x * 0.40,
       position: "relative",
       bottom: 0
     };
@@ -312,7 +313,7 @@ var RaceChoosePage = React.createClass({
     var howItWorksNode = "";
     if ( this.state.showHowto === true) {
       howItWorksNode = (
-        <div style={overlayStyle}>
+        <div style={overlayStyle} onClick={this.closeBtnClicked}>
           <img style={closebtnStyle} src="../image/closebtn.png" onClick={this.closeBtnClicked}></img>
           <div style={textContainerStyle}>
             <h1>How it works</h1>
