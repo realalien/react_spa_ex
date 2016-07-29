@@ -81,7 +81,7 @@ gulp.task("watch", function() {
   gulp.watch('app/style/css/**/*.css', ['copy-css']);
   gulp.watch('app/style/**/*.scss', ['scss']);
 
-  gulp.watch('app/html/*.html', ['html']);
+  gulp.watch('app/**/*.html', ['html']);
 
   // images, fonts, audio, etc
   gulp.watch('app/audio/*.{jpg,png,JPEG,PNG}', ['copy-img']);
@@ -98,7 +98,7 @@ gulp.task('browser-sync', ['build', 'watch'], function () {
     server: {
       baseDir: './build/',
       routes: {
-        "/" : "./html/index.html"   // TODO: not serving from path /html/index.html
+        "/" : "./index.html"   // TODO: not serving from path index.html
       }
     },
   });
@@ -194,8 +194,10 @@ gulp.task('main-js',  function(options) {
 
 
 //HTML
+// NOTE: since Shake_ex is a single page(only index.html used),
+//      this task is not well tested and tuned.
 gulp.task("html", function() {
-  gulp.src("app/html/**/*.html", { base: "./app/"})
+  gulp.src("app/**/*.html", { base: "./app/"})
   .pipe(gulp.dest("build"))
   .pipe(browserSync.reload({ stream: true }));
 });
@@ -362,7 +364,7 @@ gulp.task('help', function(){
 
 
 // gulp.task('open-page',['connect'], function(){
-//   gulp.src('./build/html/index.html')
+//   gulp.src('./build/index.html')
 //     .pipe(open());
 // });
 

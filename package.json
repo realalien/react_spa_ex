@@ -12,7 +12,8 @@
     "clean": "rm -rf build/ && mkdir build/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "beefy ./app/main.js:./build/main.min.js --browserify $(which browserify) --live",
-    "setup": "npm install && npm run clean"
+    "setup": "npm install && npm run clean",
+    "start": "NODE_ENV=production node express_server.js"
   },
   "author": "Anonymous",
   "license": "CC-BY-SA-4.0",
