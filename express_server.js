@@ -4,6 +4,9 @@ var express = require('express');
 var app = express();
 var PORT = process.env.PORT || 8080
 
+// NOTE: the development environment requires webpack setup which has not been
+//       implemented, use only production setup by 'npm start' (scripts in package.json)
+
 
 // using webpack-dev-server and middleware in development environment
 if(process.env.NODE_ENV !== 'production') {
