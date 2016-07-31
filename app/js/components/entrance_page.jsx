@@ -36,7 +36,7 @@ var EntrancePage = React.createClass({
         <EntranceTile relPath="http://cecf.co/index.php/en/news" isRound={false} imgUrl="../image/news.png" text="News"/>
         {/*<div style={spacingStyle} />*/}
         <EntranceTile relPath="/races" isRound={false} imgUrl="../image/racegame.png" text="Race Game" />
-        <EntranceTile relPath="/postcard" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
+        <EntranceTile relPath="http://happycard.hd-rj.com/" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
         {/*<SignUpForm />*/}
       </div>
     );
