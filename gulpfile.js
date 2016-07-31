@@ -22,11 +22,11 @@ var browserify = require('browserify'),
     minifycss  = require('gulp-minify-css'),
     notify     = require('gulp-notify'),
     rename     = require('gulp-rename'),
-    sass       = require('gulp-sass'),
+//    sass       = require('gulp-sass'),
     scss       = require('gulp-scss'),
     streamify  = require('gulp-streamify'),
     uglify     = require('gulp-uglify'),
-    imagemin   = require('gulp-imagemin'),
+//    imagemin   = require('gulp-imagemin'),
     //sassdoc    = require('sassdoc');
     source     = require('vinyl-source-stream'),
     sourceMaps = require('gulp-sourcemaps'),
@@ -210,12 +210,12 @@ gulp.task("copy-img", function() {
     .pipe(browserSync.reload({ stream: true }));
 });
 
-gulp.task('images-min', function() {
-  gulp.src('app/images/**/*.*')
-    .pipe(imagemin())
-    .pipe(gulp.dest('build/images'))
-    .pipe(browserSync.reload({ stream: true }));
-});
+//gulp.task('images-min', function() {
+//  gulp.src('app/images/**/*.*')
+//    .pipe(imagemin())
+//    .pipe(gulp.dest('build/images'))
+//    .pipe(browserSync.reload({ stream: true }));
+//});
 
 gulp.task("copy-audio", function() {
     gulp.src('app/audio/**/*.*')

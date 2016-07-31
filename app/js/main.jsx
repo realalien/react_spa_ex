@@ -5,14 +5,16 @@ import { Router,
       Route,
       IndexRoute,
       IndexLink,
-      browserHistory,
+      hashHistory,
       Link as ReactLink } from 'react-router';
 
 import { createHistory, useBasename } from 'history';
 // TODO: how to make it a non commonjs version?
 var Shake = require('shake.js');
 
-// import {LogoAndName} from './logo_and_name.jsx';
+import LogoAndName from './components/logo_and_name';
+
+import Link from './components/link';
 
 // NOTE: it looks like multiple components in one file causes some problems can hardly be solved
 //  so keep all class in one file.
@@ -29,65 +31,6 @@ var Shake = require('shake.js');
 
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
-
-
-////////////////////////////////////////////////////////
-//
-//  Link Util : handling both react router links and external links
-//  source : https://gist.github.com/shprink/bf9599e1d66b9dc4d151e89c1199ccb8
-//  link: https://github.com/reactjs/react-router/issues/1147
-////////////////////////////////////////////////////////
-export default class Link extends React.Component {
-  parseTo(to) {
-    let parser = document.createElement('a');
-    parser.href = to;
-    return parser;
-  }
-  isInternal(toLocation) {
-    return window.location.host === toLocation.host;
-  }
-
-  render() {
-    const {to, children, ...rest} = this.props;
-    const toLocation = this.parseTo(to);
-    const isInternal = this.isInternal(toLocation);
-    if (isInternal) {
-      return (<ReactLink to={toLocation.pathname} {...rest}>{children}</ReactLink>);
-    } else {
-      return (<a href={to} target="_blank" {...rest}>{children}</a>);
-    }
-  }
-}
-
-////////////////////////////////////////////////////////
-//
-//  Logo and Game Name
-//  to keep same position for other components below the logo for each page
-//  TODO: refactor out to the base layout
-////////////////////////////////////////////////////////
-var LogoAndName = React.createClass({
-  render : function(){
-    var imgStyle = {
-      textAlign : "center"
-    };
-
-    var divStyle = {
-      display: "inline-block",
-      width : "100%",
-      margin : "auto",
-      marginTop: 10,
-      textAlign : "center",
-      marginBottom : 30
-    };
-    return(
-      <div style={divStyle}>
-        <Link to="/">
-            <img style={imgStyle} src="../image/logo.png" />
-        </Link>
-      </div>
-    );
-  }
-});
 
 
 ////////////////////////////////////////////////////////
