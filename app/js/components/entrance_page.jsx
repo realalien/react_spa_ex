@@ -33,11 +33,11 @@ var EntrancePage = React.createClass({
         <LogoAndName />
         <div style={spacingStyle} />
         <EntranceTile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Information"/>
-        <EntranceTile relPath="/prizes" isRound={false} imgUrl="../image/news.png" text="News"/>
+        <EntranceTile relPath="http://cecf.co/index.php/en/news" isRound={false} imgUrl="../image/news.png" text="News"/>
         {/*<div style={spacingStyle} />*/}
         <EntranceTile relPath="/races" isRound={false} imgUrl="../image/racegame.png" text="Race Game" />
         <EntranceTile relPath="/postcard" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
-        <SignUpForm />
+        {/*<SignUpForm />*/}
       </div>
     );
   }
