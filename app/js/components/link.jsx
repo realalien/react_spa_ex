@@ -24,9 +24,7 @@ export default class Link extends React.Component {
     const isInternal = this.isInternal(toLocation);
     if (isInternal) {
       return (
-        <ReactLink to={toLocation.pathname}>
-        {children}
-        </ReactLink>
+        <ReactLink to={toLocation.pathname}>{children}</ReactLink>
       );
     } else {
       return (<a href={to} target="_blank" >{children}</a>);

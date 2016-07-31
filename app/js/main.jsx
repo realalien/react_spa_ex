@@ -12,9 +12,17 @@ import { createHistory, useBasename } from 'history';
 // TODO: how to make it a non commonjs version?
 var Shake = require('shake.js');
 
-import LogoAndName from './components/logo_and_name';
 
 import Link from './components/link';
+
+
+import LogoAndName from './components/logo_and_name';
+
+import SignUpForm from './components/signup_form';
+import EntranceTile from './components/entrance_tile';
+import EntrancePage from './components/entrance_page';
+
+import PostcardPage from './components/postcard_page';
 
 // NOTE: it looks like multiple components in one file causes some problems can hardly be solved
 //  so keep all class in one file.
@@ -31,159 +39,6 @@ import Link from './components/link';
 
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
-
-
-////////////////////////////////////////////////////////
-//
-//  User name and telephone form  ( from Are's proposed design)
-//
-////////////////////////////////////////////////////////
-var UserInfoForm = React.createClass({
-  getInitialState: function() {
-    return {
-      name: undefined,  // TIP: to avoid uncontrolled warning, SUG: https://github.com/erikras/redux-form/issues/735
-      phone: undefined,
-      verfified : false,  // flag to make sure only shown once after user input by server
-      clickedSave : false // flag to control the save enable/disable
-    };
-  },
-
-  closeBtnClicked : function(event){
-
-  },
-
-  handleNameInputChange : function(event){
-      this.setState({name: event.target.value});
-  },
-
-  handlePhoneInputChange : function(event){
-      this.setState({phone: event.target.value});
-  },
-
-  saveUserInfo : function(e){
-    this.setState({clickedSave: true});
-    console.log("saveUserInfo  .... not implemented.");
-  },
-
-  render : function(){
-    var overlayStyle = {
-      width : "90%",
-      height : "70%",
-      marginLeft : "5%",
-      marginRight : "5%",
-      borderRadius : 5,
-      backgroundColor: "rgba(218, 33, 39, 1)",
-      textAlign : "center",
-      color : "white",
-      position : "absolute",
-      top : 130,
-      marginTop: "12%",
-      zIndex : 9999
-    };
-
-    var inputContainerStyle = {
-      marginTop: 30,
-      marginBottom : 30
-    };
-
-    var inputTextStyle ={
-        width : "90%",
-        height : 50,
-        textAlign : "center",
-        fontSize : 26,
-        marginTop : 20
-    };
-
-
-    var inputSaveBtnStyle = {
-      height : 50,
-      width : "90%",
-      backgroundColor: "#630709",
-      fontSize: 26,
-      color: "white",
-      marginTop : 70,
-      padding: 0,
-      border: "none"
-    };
-
-    var enableSaveBtn = (
-         this.state.name!== undefined
-      && this.state.name!== ""
-      && this.state.phone!== undefined
-      && this.state.phone!== "");
-    // console.log(enableSaveBtn);
-
-    return (
-      <div style={overlayStyle} onClick={this.closeBtnClicked}>
-        <h1>Sign Up</h1>
-        <p>Blah blah blah ... Blah blah blah ... Blah blah blah ... </p>
-        <div style={inputContainerStyle}>
-          <input
-            style={inputTextStyle}
-            placeholder="Name"
-            value={this.state.name}
-            onChange={this.handleNameInputChange}
-          />
-          <input
-            style={inputTextStyle}
-            placeholder="Phone Number"
-            value={this.state.phone}
-            type="number"
-            onChange={this.handlePhoneInputChange}
-          />
-
-          <button
-            style={inputSaveBtnStyle}
-            type="submit"
-            disabled={!enableSaveBtn}
-            onClick={this.saveUserInfo}>
-            Save
-          </button>
-
-        </div>
-      </div>
-    );
-  }
-});
-
-
-////////////////////////////////////////////////////////
-//
-//  Game Entrance  ( from Are's proposed design)
-//
-////////////////////////////////////////////////////////
-var GameEntrance = React.createClass({
-  render: function() {
-    var divStyle = {
-      display: "inline",
-      width : "100%",
-      margin : "auto",
-      marginTop: 10
-    };
-
-    var spacingStyle = {
-      display: "inline-block",
-      width : x,
-      margin : "auto",
-      height: 20, // TODO: how to best fit for different size of screen?
-      clear : "both"
-    };
-
-    return (
-      <div>
-        <LogoAndName />
-        <div style={spacingStyle} />
-        <Tile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Information"/>
-        <Tile relPath="/prizes" isRound={false} imgUrl="../image/news.png" text="News"/>
-        {/*<div style={spacingStyle} />*/}
-        <Tile relPath="/races" isRound={false} imgUrl="../image/racegame.png" text="Race Game" />
-        <Tile relPath="/postcard" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
-
-        <UserInfoForm />
-      </div>
-    );
-  }
-});
 
 
 ////////////////////////////////////////////////////////
@@ -233,108 +88,7 @@ var NewsPage = React.createClass({
   }
 });
 
-////////////////////////////////////////////////////////
-//
-//  Tile
-//  Common util, tiles of menu item for the front pages, accept imgUrl
-//
-////////////////////////////////////////////////////////
 
-var Tile = React.createClass({
-
-  _clickHandler : function() {
-        /*
-        Here you could add some validation that you truly have a callback in your props.
-        if(_(this.props.clickHandler).isFunction() ) {
-        }
-        */
-        this.props.clickHandler();
-    },
-
-  render: function() {
-    var borderRadius = ( this.props.isRound === true ? "50%" : 5 ) ;
-    var tileStyle = {
-      height:  x * 0.40 ,
-      width:  x * 0.40 ,
-      padding: "auto",
-      margin: 10,
-      textAlign: "center",
-      color: "white",
-      backgroundColor: "rgba(218, 33, 39, 0.74)", // "#DA2127",
-      display : 'inline-block',
-      borderRadius : borderRadius,
-      //background: 'url(' + this.props.imgUrl + ') no-repeat center center fixed',
-    };
-
-    var linkStyle = {
-      display: "table",
-      width : "100%",
-      height : "100%",
-      // border : "2px dashed green",
-      float: "right",
-      textAlign : "center"
-    };
-
-    var tableWrappingStyle = {
-      width : "100%",
-      height : "100%",
-      display: "table",
-      overflow: "hidden",
-      // border : "2px green dashed"
-    };
-
-    var cellWrappingStyle = {
-      display: "table-cell",
-      verticalAlign: "middle",
-      textAlign: "center",
-      // border : "2px brown solid",
-    };
-
-    var imgStyle = {
-      display: "inline-block",
-      // border : "2px red solid",
-    };
-
-    var rowWrappingStyle = {
-      display: "table-row",
-      textAlign : "center",
-      // border : "2px black dashed",
-      width : x * 0.40,
-      margin : "auto",
-      position: "relative",
-      bottom: 10
-    };
-
-    var spanStyle = {
-      fontSize : 20,
-      textAlign : "center",
-      // border : "2px yellow dashed",
-      width : x * 0.40,
-      position: "relative",
-      bottom: 0
-    };
-
-    var spanText = ""
-    if (this.props.text !== "") {
-      spanText = <p style={spanStyle} >{this.props.text}</p>
-    }
-
-    return (
-      <div style={tileStyle}>
-        <Link style={linkStyle} to={this.props.relPath}>
-          <div style={tableWrappingStyle}>
-            <div style={cellWrappingStyle}>
-              <img style={imgStyle} src={this.props.imgUrl}/>
-              <div style={rowWrappingStyle}>
-                {spanText}
-              </div>
-            </div>
-          </div>
-        </Link>
-      </div>
-    );
-  }
-});
 
 
 ////////////////////////////////////////////////////////
@@ -342,18 +96,18 @@ var Tile = React.createClass({
 // Race choose page, (drafted by Jameson)
 //
 ////////////////////////////////////////////////////////
-var Entrance = React.createClass({
-    render: function() {
-    return (
-      <div>
-        <Tile text="Event Info" relPath="/event" />
-        <Tile text="Races" relPath="/welcome" />
-        <Tile text="Postcard" relPath="/share" />
-        <Tile text="Coming Event" relPath="https://www.baidu.com"/>
-      </div>
-    );
-  }
-});
+// var Entrance = React.createClass({
+//     render: function() {
+//     return (
+//       <div>
+//         <EntranceTile text="Event Info" relPath="/event" />
+//         <EntranceTile text="Races" relPath="/welcome" />
+//         <EntranceTile text="Postcard" relPath="/share" />
+//         <EntranceTile text="Coming Event" relPath="https://www.baidu.com"/>
+//       </div>
+//     );
+//   }
+// });
 
 
 ////////////////////////////////////////////////////////
@@ -795,52 +549,6 @@ var GameIntro = React.createClass({
 });
 
 
-
-
-
-
-
-
-////////////////////////////////////////////////////////
-//
-// PostcardPage, modify content to share via weixin
-//
-////////////////////////////////////////////////////////
-var PostcardPage = React.createClass({
-  render: function(){
-    var textStyle = {
-        color: "yellow",
-        fontSize : 21
-    };
-
-    return (
-      <div>
-        <LogoAndName />
-        <div style={textStyle}>
-           This page is placeholder page for  Prizes .
-        </div>
-      </div>
-    );
-  }
-});
-
-
-////////////////////////////////////////////////////////
-//
-// Welcome, Menu items of Races, Leadboard,
-//
-////////////////////////////////////////////////////////
-var Welcome = React.createClass({
-  render: function() {
-    return (
-       <div>
-        <Tile text="Races" relPath="/races" />
-        <Tile text="Leaderboard" relPath="/leaderboard" />
-        <Tile text="Results" relPath="/results" />
-      </div>
-    );
-  }
-});
 
 
 ////////////////////////////////////////////////////////
@@ -1381,7 +1089,7 @@ var App = React.createClass({
 ReactDOM.render(
    <Router>
     <Route path="/" component={App}>
-      <IndexRoute component={GameEntrance}/>
+      <IndexRoute component={EntrancePage}/>
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/prizes" component={PrizesPage} />
       <Route path="/news" component={NewsPage} />
