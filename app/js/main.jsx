@@ -9,7 +9,6 @@ import { Router,
       Link as ReactLink } from 'react-router';
 
 import { createHistory, useBasename } from 'history';
-// TODO: how to make it a non commonjs version?
 
 
 
@@ -61,7 +60,7 @@ var App = React.createClass({
 
 
 ReactDOM.render(
-   <Router>
+   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={EntrancePage}/>
       <Route path="/leaderboard" component={LeaderboardPage} />
