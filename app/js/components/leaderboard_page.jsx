@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from './link';
-import LogoAndName from './logo_and_name';
 ////////////////////////////////////////////////////////
 //
 // Leadboard
@@ -104,7 +103,6 @@ var LeaderboardPage = React.createClass({
   render: function() {
     return (
       <div>
-        <LogoAndName />
         <LeadboardTable leaders={theLeaders} />
       </div>
     );

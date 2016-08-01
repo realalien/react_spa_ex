@@ -14,6 +14,7 @@ import { createHistory, useBasename } from 'history';
 
 import Link from './components/link';
 
+import LogoAndName from './components/logo_and_name';
 
 import EntrancePage from './components/entrance_page';
 
@@ -25,6 +26,9 @@ import NewsPage from './components/news_page';
 import ShakePage from './components/shake_page';
 import RaceChoosePage from './components/race_choose_page';
 import HorseSelectPage from './components/horse_select_page';
+
+
+
 
 // NOTE: it looks like multiple components in one file causes some problems can hardly be solved
 //  so keep all class in one file.
@@ -50,6 +54,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
+        <LogoAndName />
         <div className="content">
           {this.props.children}
         </div>

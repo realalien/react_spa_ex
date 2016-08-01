@@ -1,5 +1,4 @@
 import React from 'react';
-import LogoAndName from './logo_and_name';
 
 ////////////////////////////////////////////////////////
 //
@@ -14,12 +13,9 @@ var NewsPage = React.createClass({
     };
 
     return (
-      <div>
-        <LogoAndName />
         <div style={textStyle}>
            This page is placeholder page for News .
         </div>
-      </div>
     );
   }
 });

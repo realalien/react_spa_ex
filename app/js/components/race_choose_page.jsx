@@ -1,6 +1,5 @@
 import React from 'react';
 import TextBelt from './textbelt';
-import LogoAndName from './logo_and_name';
 import Link from './link';
 
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
@@ -32,14 +31,12 @@ var RaceSelectTile = React.createClass({
   }
 });
 
-
 var RaceSelectTable = React.createClass({
   handleRaceTile : function(i, props) {
-
+    // nothing to do
   },
 
   render : function() {
-
     var divStyle = {
       textAlign : "center",
       display : "inline-block",
@@ -48,7 +45,6 @@ var RaceSelectTable = React.createClass({
 
     var cells = [];
     var w = (x*0.5-10*2-10*6) / 3.0;
-    console.log(w);
     for (var i=1; i <= this.props.numOfCells; i++) {
       cells.push(
         <div style={divStyle} onClick={this.handleRaceTile.bind(this, i, this.props)} key={i} >
@@ -59,19 +55,63 @@ var RaceSelectTable = React.createClass({
       )
     }
 
-    return (
-      <div style={divStyle}>
-        {cells}
-      </div>
-    );
+    if (this.props.numOfCells.length > 0) {
+      return (
+        <div style={divStyle}>
+          {cells}
+        </div>
+      );
+    } else {
+      return  (
+        <div>
+          <TextBelt text="No races currently!"/>
+        </div>
+      );
+    }
   }
 });
 
 
+var dummyData = [
+  {id: "1", name: "1", status: "closed"},
+  {id: "2", name: "2", status: "open"},
+  {id: "3", name: "3", status: "selected"},
+  {id: "4", name: "4", status: "closed"},
+  {id: "5", name: "5", status: "open"},
+  {id: "6", name: "6", status: "selected"}
+];
+
 var RaceChoosePage = React.createClass({
   getInitialState: function() {
-    return { showHowto: true };
+    return {
+      url: "/api/races", // TODO: temp code, should passed from this.props
+      pollInterval: 5000,
+      showHowto: true,
+      races: []
+    };
   },
+
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.state.pollInterval);
+  },
+
+  loadCommentsFromServer: function() {
+    console.log("loadCommentsFromServer");
+
+    $.ajax({
+      url: this.state.url, //this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({races: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.state.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+
 
   closeBtnClicked : function() {
     this.setState({ showHowto: false });
@@ -122,10 +162,9 @@ var RaceChoosePage = React.createClass({
     return (
       <div>
         <div>
-          <LogoAndName />
           <TextBelt text="Select your race"/>
           <div></div>
-          <RaceSelectTable numOfCells={6}/>
+          <RaceSelectTable numOfCells={this.state.races.length}/>
         </div>
 
         {howItWorksNode}

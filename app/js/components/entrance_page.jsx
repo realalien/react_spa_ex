@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from './link';
 import EntranceTile from './entrance_tile';
-import LogoAndName from './logo_and_name';
 import SignUpForm from './signup_form';
 ////////////////////////////////////////////////////////
 //
@@ -30,11 +29,9 @@ var EntrancePage = React.createClass({
 
     return (
       <div>
-        <LogoAndName />
         <div style={spacingStyle} />
         <EntranceTile relPath="/leaderboard" isRound={false} imgUrl="../image/leaderboard.png" text="Information"/>
         <EntranceTile relPath="http://cecf.co/index.php/en/news" isRound={false} imgUrl="../image/news.png" text="News"/>
-        {/*<div style={spacingStyle} />*/}
         <EntranceTile relPath="/races" isRound={false} imgUrl="../image/racegame.png" text="Race Game" />
         <EntranceTile relPath="http://happycard.hd-rj.com/" isRound={false} imgUrl="../image/racegame.png" text="Postcard" />
         {/*<SignUpForm />*/}
