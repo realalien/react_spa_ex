@@ -38,8 +38,6 @@ import HorseSelectPage from './components/horse_select_page';
 // TODO:
 // * TODO: the asset of tile icon should be the same size,
 //         otherwise the positions of itself and siblings are too complex
-// * TODO: refactor the LogoAndName components to base layout component rather
-//         than on every page component.
 // * TODO: define API protocol for server data
 // * TODO: defensive:  collect all user screen size in case of any UI misconfortableness
 
