@@ -1,6 +1,5 @@
 import React from 'react';
 import TextBelt from './textbelt';
-import LogoAndName from './logo_and_name';
 
 var Shake = require('shake.js');
 ////////////////////////////////////////////////////////
