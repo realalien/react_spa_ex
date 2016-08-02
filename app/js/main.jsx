@@ -47,31 +47,51 @@ import HorseSelectPage from './components/horse_select_page';
 // App
 //
 ////////////////////////////////////////////////////////
+var dummyData = [
+  {id: "1", name: "1", status: "closed"},
+  {id: "2", name: "2", status: "open"},
+  {id: "3", name: "3", status: "selected"},
+  {id: "4", name: "4", status: "closed"},
+  {id: "5", name: "5", status: "open"},
+  {id: "6", name: "6", status: "selected"}
+];
+var jsonStr = JSON.stringify(dummyData);
+
 
 var App = React.createClass({
+
+  componentDidMount: function(){
+    console.log(jsonStr);
+    console.log(this.props);
+    console.log(this.props.children);
+    console.log(this.props.data);
+    console.log("--------------------");
+  },
+
   render: function() {
     return (
-      <div>
-        <LogoAndName />
         <div className="content">
+          <LogoAndName />
           {this.props.children}
         </div>
-      </div>
     );
   }
 });
 
 
+
+// TODO: all data are supposed to be managed in the App components
+
 ReactDOM.render(
    <Router history={hashHistory}>
-    <Route path="/" component={App}>
+    <Route path="/" component={App} data={dummyData}>
       <IndexRoute component={EntrancePage}/>
       <Route path="/leaderboard" component={LeaderboardPage} />
 
       <Route path="/prizes" component={PrizesPage} />
       <Route path="/news" component={NewsPage} />
       <Route path="/postcard" component={PostcardPage} />
-      <Route path="/races" component={RaceChoosePage} />
+      <Route path="/races" component={RaceChoosePage} races={dummyData}/>
       <Route path="/race/:raceId" component={HorseSelectPage} />
     </Route>
   </Router>,

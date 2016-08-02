@@ -203,7 +203,6 @@ var HorseSelectPage = React.createClass({
     var strForTextBelt =  "Race #" + this.state.raceId;
     return (
       <div>
-        <LogoAndName />
         <TextBelt text={strForTextBelt} />
         <div></div>
         {symbolShakeNode}

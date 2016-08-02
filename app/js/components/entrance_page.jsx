@@ -11,6 +11,14 @@ import SignUpForm from './signup_form';
 var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
 var EntrancePage = React.createClass({
+
+
+  componentDidMount: function () {
+    console.log("------------   componentDidMount ------------ ");
+    console.log(this.props);
+  },
+
+
   render: function() {
     var divStyle = {
       display: "inline",

@@ -72,28 +72,22 @@ var RaceSelectTable = React.createClass({
 });
 
 
-var dummyData = [
-  {id: "1", name: "1", status: "closed"},
-  {id: "2", name: "2", status: "open"},
-  {id: "3", name: "3", status: "selected"},
-  {id: "4", name: "4", status: "closed"},
-  {id: "5", name: "5", status: "open"},
-  {id: "6", name: "6", status: "selected"}
-];
-
 var RaceChoosePage = React.createClass({
   getInitialState: function() {
     return {
       url: "/api/races", // TODO: temp code, should passed from this.props
       pollInterval: 5000,
       showHowto: true,
-      races: []
+      races: this.props.races
     };
   },
 
   componentDidMount: function() {
-    this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.state.pollInterval);
+    // this.loadCommentsFromServer();
+    // setInterval(this.loadCommentsFromServer, this.state.pollInterval);
+    console.log(this.props.races);
+    console.log(this.state.races);
+    console.log(this.props.route.races);
   },
 
   loadCommentsFromServer: function() {
@@ -164,7 +158,7 @@ var RaceChoosePage = React.createClass({
         <div>
           <TextBelt text="Select your race"/>
           <div></div>
-          <RaceSelectTable numOfCells={this.state.races.length}/>
+          <RaceSelectTable numOfCells={6}/>
         </div>
 
         {howItWorksNode}
